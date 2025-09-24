@@ -1,0 +1,378 @@
+---
+include:
+  - docassemble.AssemblyLine:assembly_line.yml
+  - docassemble.MassAccess:massaccess.yml
+---
+metadata:
+  title: >-
+    Utility Shutoff Prevention Form
+  short title: >-
+    Utility Protections
+  description: |-
+    This interview helps someone in Massachusetts write a letter to a utility company to prevent them from shutting off service.
+  can_I_use_this_form: |
+    If you are a doctor, you can use this interview to write a letter to a utility company.
+  before_you_start: |
+    This interview will help you write a letter to a utility company.
+    
+    Before you get started, please gather:
+    
+    1. Your patient's address.
+    2. Your patient's utility company name and address.
+    3. Your patient's utility account number.
+    
+    When you are finished, you will need to:
+    
+    1. Submit the letter.
+  maturity: production
+  estimated_completion_minutes: 10
+  estimated_completion_delta: 5
+  tags: []
+  authors:
+    - Mark Marotta
+  original_form: []
+  original_form_published_on: ""
+  help_page_url: >-
+    https://www.masslegalhelp.org/housing-apartments-shelter/utilities/special-protections-against-shut-offs
+  help_page_title: >-
+    Mass Legal Help
+  allowed_courts: []
+  typical_role: "plaintiff"
+  al_weaver_version: "1.11.0"
+  generated_on: "2025-09-10"
+  languages:
+    - en
+  jurisdiction: NAM-US-US+MA
+  review_date: 2025-09-10
+  form_titles:
+    - Utility Shutoff Prevention Form
+  form_numbers: []
+  update_notes: |
+---
+code: |
+  # This controls the default country and list of states in address field questions
+  AL_DEFAULT_COUNTRY = "US"
+---
+code: |
+  # This controls the default state in address field questions
+  AL_DEFAULT_STATE = "MA"
+---
+code: |
+  github_repo_name =  'docassemble-UtilityShutoffPreventionForm'
+---
+code: |
+  interview_short_title = "Utility Shut-off Letter"
+---
+code: |
+  al_form_type = "letter" 
+---
+code: |
+  al_person_answering = "doctor"
+---
+objects:
+  - users: ALPeopleList.using(ask_number=True,target_number=1)
+  - other_parties: ALPeopleList.using(ask_number=True,target_number=1)
+---
+sections:
+  - review_utility_shutoff_prevention_form: Review your answers
+---
+#################### Interview order #####################
+comment: |
+  Controls order and branching logic for questions specific to this form
+id: interview_order_utility_shutoff_prevention_form
+code: |
+  # Set the allowed courts for this interview
+  nav.set_section("review_utility_shutoff_prevention_form")
+  user_role = "Doctor"
+  user_ask_role = "Doctor"
+  users[0].job_title
+  users[0].address.address
+  other_parties[0].business_name
+  other_parties[0].address.address
+  knows_utility_account_number
+  set_progress(20)
+  plaintiffs[0].illness
+  plaintiffs[0].address.address
+  set_progress(40)
+  plaintiffs.gather()
+  _date
+  users[0].signature
+  interview_order_utility_shutoff_prevention_form = True
+---
+###################### Main order ######################
+comment: |
+  This block includes the logic for standalone interviews.
+  Delete mandatory: True to include in another interview
+mandatory: True
+code: |
+  al_intro_screen
+  utility_shutoff_prevention_form_intro
+  interview_order_utility_shutoff_prevention_form
+  signature_date
+  # Store anonymous data for analytics / statistics
+  store_variables_snapshot(
+      persistent=True,
+      data={
+          "zip": showifdef("users[0].address.zip"),
+          "reached_interview_end": True,
+      },
+  )
+  utility_shutoff_prevention_form_download
+---
+id: Utility_Shutoff_Prevention_Form
+continue button field: utility_shutoff_prevention_form_intro
+question: |
+  Utility Shutoff Prevention Form
+subquestion: |
+  This interview will help you write a letter to a utility company.
+  
+  Before you get started, please gather:
+  
+  1. Your patient's address.
+  2. Your patient's utility company name and address.
+  3. Your patient's utility account number.
+  
+  When you are finished, you will need to:
+  
+  1. Submit the letter.
+
+  If you are a doctor, you can use this interview to write a letter to a utility company.
+
+  Most people take about 10 minutes to complete this interview.
+---
+id: Enter Your Info
+question: |
+  Enter Your Info
+fields:
+  - "What is your name?": users[0].full_name  
+  - "What is your job title?": users[0].job_title
+  - "What is the name of the place you work?": users[0].business_name
+---
+id: Patient's Utility Company Account Number
+question: |
+  Patient's Utility Company Account Number
+fields:
+  - "Do you know the patient's account number?": knows_utility_account_number
+    datatype: yesnoradio 
+  - "Patient's Utility Account Number": users[0].account_number
+    show if: knows_utility_account_number
+---
+sets:
+  - users[i].name.first
+  - users[i].name.last
+  - users[i].name.middle
+  - users[i].name.suffix    
+id: other users names
+question: |
+  % if i == 0 and al_person_answering == "user":
+  What is your name?
+  % else:
+  % if al_form_type in ['starts_case','existing_case','appeal']:
+  Who is the ${ ordinal(i) } person on your side of the case?
+  % else:
+  What is the name of the ${ ordinal_number(i) } person who is adding their name to
+  this form with you?
+  % endif
+  % endif
+fields:
+  - code: |
+      users[i].name_fields()
+---
+id: Today's Date
+question: |
+  Today's Date
+fields:
+  - "Date of": _date
+    datatype: date
+---
+id: Utility Company Name
+question: |
+  Utility Company Name
+fields:
+  - "Name of the utility company": other_parties[0].business_name
+---
+id: Patient's Illness
+question: |
+  Patient's Illness
+subquestion: |
+  Under MA law, a "serious health condition" is an illness, injury, impairment, or physical or mental condition that involves (i) inpatient care in a hospital, hospice, or residential medical facility; OR (ii) continuing treatment by a health care provider. 
+
+  Under 29 CFR §825.115(c), chronic conditions is one which: (1) requires periodic visits (at leat twice a year) for treatment by a health care provider, or by a urse under direct supervision of a health care provider; (2) continues over an extended period of time; and (3) may cause episodic rather than a continuing period of incapacity (e.g., asthma, diabetes, epliepsy, etc.). 
+fields:
+  - "Patient's illness": users[0].illness
+---
+id: preview utility_shutoff_prevention_form
+question: |
+  Preview your form before you sign it
+subquestion: |
+  Here is a preview of the form you will sign on the next page.   
+  
+  ${ al_recipient_bundle.as_pdf(key='preview') }
+
+  Click the image to open it in a new tab. Click the "Edit answers" button
+  to edit your answers.
+
+  ${ action_button_html(url_action('review_utility_shutoff_prevention_form'), label='Edit answers', color='info') }
+  
+  Remember to come back to this window to continue and sign your form.
+continue button field: utility_shutoff_prevention_form_preview_question    
+---
+code: |
+  signature_fields = ['users[0].signature']
+---
+id: utility shutoff prevention form review screen
+event: review_utility_shutoff_prevention_form
+question: |
+  Review your answers
+review:
+  - Edit: users.revisit
+    button: |
+      **Users**
+
+      % for item in users:
+        * ${ item }
+      % endfor
+  - Edit: _date
+    button: |
+      **Date of**:
+      ${ _date }
+  - Edit: plaintiffs.revisit
+    button: |
+      **Plaintiffs**
+
+      % for item in plaintiffs:
+        * ${ item }
+      % endfor
+  - Edit: other_parties.revisit
+    button: |
+      **Other parties**
+
+      % for item in other_parties:
+        * ${ item }
+      % endfor
+---
+continue button field: users.revisit
+question: |
+  Edit users
+subquestion: |
+  ${ users.table }
+
+  ${ users.add_action() }
+---
+table: users.table
+rows: users
+columns:
+  - Job: |
+      row_item.job if defined("row_item.job.title") else ""
+  - Signature: |
+      row_item.signature if defined("row_item.signature") else ""
+  - Business name: |
+      row_item.business_name if defined("row_item.business_name") else ""
+  - Address: |
+      row_item.address.block() if defined("row_item.address.address") else ""
+edit:
+  - job.title
+  - signature
+  - business_name
+  - address.address
+confirm: True
+
+---
+continue button field: plaintiffs.revisit
+question: |
+  Edit plaintiffs
+subquestion: |
+  ${ plaintiffs.table }
+
+  ${ plaintiffs.add_action() }
+---
+table: plaintiffs.table
+rows: plaintiffs
+columns:
+  - Address: |
+      row_item.address.block() if defined("row_item.address.address") else ""
+  - Account: |
+      row_item.account if defined("row_item.account.number") else ""
+  - Illness: |
+      row_item.illness if defined("row_item.illness") else ""
+  - Name: |
+      row_item.name.full() if defined("row_item.name.first") else ""
+edit:
+  - address.address
+  - account.number
+  - illness
+  - name.first
+confirm: True
+
+---
+continue button field: other_parties.revisit
+question: |
+  Edit other_parties
+subquestion: |
+  ${ other_parties.table }
+
+  ${ other_parties.add_action() }
+---
+table: other_parties.table
+rows: other_parties
+columns:
+  - Business name: |
+      row_item.business_name if defined("row_item.business_name") else ""
+  - Address: |
+      row_item.address.block() if defined("row_item.address.address") else ""
+edit:
+  - business_name
+  - address.address
+confirm: True
+
+---
+id: download utility_shutoff_prevention_form
+event: utility_shutoff_prevention_form_download
+question: |
+  All done
+subquestion: |
+  Thank you ${users}. Your form is ready to download and deliver.
+  
+  View, download and send your form below. Click the "Edit answers" button to fix any mistakes.
+
+  ${ action_button_html(url_action('review_utility_shutoff_prevention_form'), label='Edit answers', color='info') }
+  
+  
+  ${ al_user_bundle.download_list_html() }
+  
+
+  ${ al_user_bundle.send_button_html(show_editable_checkbox=True) }
+
+progress: 100
+---
+# ALDocument objects specify the metadata for each template
+objects:
+  - utility_shutoff_prevention_form_Post_interview_instructions: ALDocument.using(title="Instructions", filename="utility_shutoff_prevention_form_next_steps.docx", enabled=True, has_addendum=False)
+  - utility_shutoff_prevention_form_attachment: ALDocument.using(title="Utility Shutoff Prevention Form", filename="utility_shutoff_prevention_form", enabled=True, has_addendum=False, )
+---
+# Bundles group the ALDocuments into separate downloads, such as for court and for the user
+objects:
+  - al_user_bundle: ALDocumentBundle.using(elements=[utility_shutoff_prevention_form_Post_interview_instructions, utility_shutoff_prevention_form_attachment], filename="utility_shutoff_prevention_form", title="All forms to download for your records", enabled=True)
+  - al_recipient_bundle: ALDocumentBundle.using(elements=[utility_shutoff_prevention_form_attachment],  filename="utility_shutoff_prevention_form", title="All forms to file", enabled=True)
+---
+# Each attachment defines a key in an ALDocument. We use `i` as the placeholder here so the same template is 
+# used for "preview" and "final" keys, and logic in the template checks the value of 
+# `i` to show or hide the user's signature
+attachment:
+  name: Post-interview-Instructions
+  filename: utility_shutoff_prevention_form_next_steps
+  docx template file: utility_shutoff_prevention_form_next_steps.docx
+  variable name: utility_shutoff_prevention_form_Post_interview_instructions[i]
+  skip undefined: True
+  tagged pdf: True
+---
+attachment:
+  name: utility shutoff prevention form
+  filename: utility_shutoff_prevention_form
+  variable name: utility_shutoff_prevention_form_attachment[i]
+  skip undefined: True
+  docx template file: utility_shutoff_prevention_form.docx
+  tagged pdf: True
+
+
+
