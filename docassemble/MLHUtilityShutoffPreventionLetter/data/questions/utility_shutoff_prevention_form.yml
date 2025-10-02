@@ -72,6 +72,7 @@ code: |
 objects:
   - users: ALPeopleList.using(ask_number=True,target_number=1)
   - other_parties: ALPeopleList.using(ask_number=True,target_number=1)
+  - plaintiffs: ALPeopleList.using(ask_number=True,target_number=1)
 ---
 sections:
   - review_utility_shutoff_prevention_form: Review your answers
@@ -83,18 +84,24 @@ id: interview_order_utility_shutoff_prevention_form
 code: |
   # Set the allowed courts for this interview
   nav.set_section("review_utility_shutoff_prevention_form")
-  user_role = "Doctor"
-  user_ask_role = "Doctor"
+  user_role = "doctor"
+  user_ask_role = "doctor"
+  users[0].name.full
   users[0].job_title
-  users[0].address.address
+  users[0].business_name
+  users[0].address.block
+  users.gather()
+  plaintiffs[0].name.full
+  plaintiffs[0].illness
+  plaintiffs[0].address.block
+  plaintiffs[0].account_number
+  plaintiffs.gather()
   other_parties[0].business_name
-  other_parties[0].address.address
+  other_parties[0].address.line_one
+  other_parties[0].address.line_two
   knows_utility_account_number
   set_progress(20)
-  plaintiffs[0].illness
-  plaintiffs[0].address.address
   set_progress(40)
-  plaintiffs.gather()
   _date
   users[0].signature
   interview_order_utility_shutoff_prevention_form = True
@@ -108,6 +115,9 @@ code: |
   al_intro_screen
   utility_shutoff_prevention_form_intro
   interview_order_utility_shutoff_prevention_form
+  users[0].name_fields()
+  users[0].job_title
+  users[0].address.address
   signature_date
   # Store anonymous data for analytics / statistics
   store_variables_snapshot(
@@ -140,11 +150,33 @@ subquestion: |
 
   Most people take about 10 minutes to complete this interview.
 ---
-id: Enter Your Info
+sets:
+  - users[i].name.first
+  - users[i].name.last
+  - users[i].name.middle
+  - users[i].name.suffix    
+id: other users names
 question: |
-  Enter Your Info
+  What is your name?
 fields:
-  - "What is your name?": users[0].full_name  
+  - code: |
+      users[i].name_fields()
+---
+id: users business address
+question: |
+  What is your address?
+fields:
+  - Street address: user_address.street
+  - City: user_address.city
+  - State: user_address.state
+    code: states_list()
+  - Zip code: user_address.zip
+    datatype: zip
+---
+Id: Enter your info
+question: |
+  Enter your job title and place of work. 
+fields:
   - "What is your job title?": users[0].job_title
   - "What is the name of the place you work?": users[0].business_name
 ---
@@ -154,29 +186,35 @@ question: |
 fields:
   - "Do you know the patient's account number?": knows_utility_account_number
     datatype: yesnoradio 
-  - "Patient's Utility Account Number": users[0].account_number
+  - "Patient's Utility Account Number": plaintiffs[0].account_number
     show if: knows_utility_account_number
+---   
+#id: Patient names
+#question: |
+ # What is your patient's name?
+#fields:
+ # - First Name: plaintiff.name.first
+ # - Middle Name: plaintiff.name.middle
+  #  required: False
+ # - Last Name: plaintiff.name.last
+ # - Suffix: plaintiff.name.suffix
+ #   required: False
 ---
+id: names of people
 sets:
-  - users[i].name.first
-  - users[i].name.last
-  - users[i].name.middle
-  - users[i].name.suffix    
-id: other users names
+  - x[i].name.first
+  - x[i].name.last
+  - x[i].name.middle
+  - x[i].name.suffix
 question: |
-  % if i == 0 and al_person_answering == "user":
-  What is your name?
-  % else:
-  % if al_form_type in ['starts_case','existing_case','appeal']:
-  Who is the ${ ordinal(i) } person on your side of the case?
-  % else:
-  What is the name of the ${ ordinal_number(i) } person who is adding their name to
-  this form with you?
-  % endif
-  % endif
+  What is your patient's name?
 fields:
-  - code: |
-      users[i].name_fields()
+  - First Name: plaintiff.name.first
+  - Middle Name: plaintiff.name.middle
+    required: False
+  - Last Name: plaintiff.name.last
+  - Suffix: plaintiff.name.suffix
+    required: False
 ---
 id: Today's Date
 question: |
@@ -190,16 +228,25 @@ question: |
   Utility Company Name
 fields:
   - "Name of the utility company": other_parties[0].business_name
+ # - "Address of the utility company": other_parties[0].address.address
+---
+Id: Utility Company Address
+Question: What is the address for the utility company?
+fields:
+  - Street: other_parties[i].address.street
+  - City: other_parties[i].address.city
+  - State: other_parties[i].address.state
+  - Zip: other_parties[i].address.zip
 ---
 id: Patient's Illness
 question: |
-  Patient's Illness
+  What is the medical condition or illness of your patient?
 subquestion: |
   Under MA law, a "serious health condition" is an illness, injury, impairment, or physical or mental condition that involves (i) inpatient care in a hospital, hospice, or residential medical facility; OR (ii) continuing treatment by a health care provider. 
 
   Under 29 CFR §825.115(c), chronic conditions is one which: (1) requires periodic visits (at leat twice a year) for treatment by a health care provider, or by a urse under direct supervision of a health care provider; (2) continues over an extended period of time; and (3) may cause episodic rather than a continuing period of incapacity (e.g., asthma, diabetes, epliepsy, etc.). 
 fields:
-  - "Patient's illness": users[0].illness
+  - "Patient's illness": plaintiffs[0].illness
 ---
 id: preview utility_shutoff_prevention_form
 question: |
