@@ -86,20 +86,20 @@ code: |
   nav.set_section("review_utility_shutoff_prevention_form")
   user_role = "doctor"
   user_ask_role = "doctor"
-  users[0].name.full
+  users[0].name.full()
   users[0].job_title
   users[0].business_name
-  users[0].address.block
+  users[0].address.address
   users.gather()
-  plaintiffs[0].name.full
+  plaintiffs[0].name.full()
+  plaintiffs[0].address.address
   plaintiffs[0].illness
-  plaintiffs[0].address.block
-  plaintiffs[0].account_number
+  knows_utility_account_number
   plaintiffs.gather()
   other_parties[0].business_name
-  other_parties[0].address.line_one
-  other_parties[0].address.line_two
+  other_parties[0].address.address
   knows_utility_account_number
+  other_parties.gather()
   set_progress(20)
   set_progress(40)
   _date
@@ -115,9 +115,6 @@ code: |
   al_intro_screen
   utility_shutoff_prevention_form_intro
   interview_order_utility_shutoff_prevention_form
-  users[0].name_fields()
-  users[0].job_title
-  users[0].address.address
   signature_date
   # Store anonymous data for analytics / statistics
   store_variables_snapshot(
@@ -149,28 +146,27 @@ subquestion: |
   If you are a doctor, you can use this interview to write a letter to a utility company.
 
   Most people take about 10 minutes to complete this interview.
----
-sets:
-  - users[i].name.first
-  - users[i].name.last
-  - users[i].name.middle
-  - users[i].name.suffix    
-id: other users names
+---  
+id: User's name
 question: |
   What is your name?
 fields:
-  - code: |
-      users[i].name_fields()
+  - First Name: users[0].name.first
+  - Middle Name: users[0].name.middle
+    required: False
+  - Last Name: users[0].name.last
+  - Suffix: users[0].name.suffix
+    required: False
 ---
 id: users business address
 question: |
   What is your address?
 fields:
-  - Street address: user_address.street
-  - City: user_address.city
-  - State: user_address.state
+  - Street address: users[0].address.street
+  - City: users[0].address.city
+  - State: users[0].address.state
     code: states_list()
-  - Zip code: user_address.zip
+  - Zip code: users[0].address.zip
     datatype: zip
 ---
 Id: Enter your info
@@ -178,7 +174,7 @@ question: |
   Enter your job title and place of work. 
 fields:
   - "What is your job title?": users[0].job_title
-  - "What is the name of the place you work?": users[0].business_name
+  - "Where do you work?": users[0].business_name
 ---
 id: Patient's Utility Company Account Number
 question: |
@@ -188,40 +184,25 @@ fields:
     datatype: yesnoradio 
   - "Patient's Utility Account Number": plaintiffs[0].account_number
     show if: knows_utility_account_number
----   
-#id: Patient names
-#question: |
- # What is your patient's name?
-#fields:
- # - First Name: plaintiff.name.first
- # - Middle Name: plaintiff.name.middle
-  #  required: False
- # - Last Name: plaintiff.name.last
- # - Suffix: plaintiff.name.suffix
- #   required: False
 ---
-id: names of people
-sets:
-  - x[i].name.first
-  - x[i].name.last
-  - x[i].name.middle
-  - x[i].name.suffix
+id: Patient Name
 question: |
   What is your patient's name?
 fields:
-  - First Name: plaintiff.name.first
-  - Middle Name: plaintiff.name.middle
+  - Patient First Name: plaintiffs[0].name.first
+  - Patient Middle Name: plaintiffs[0].name.middle
     required: False
-  - Last Name: plaintiff.name.last
-  - Suffix: plaintiff.name.suffix
+  - Patient Last Name: plaintiffs[0].name.last
+  - Suffix (if applicable): plaintiffs[0].name.suffix
     required: False
 ---
 id: Today's Date
 question: |
-  Today's Date
+  When are you sending this letter? 
 fields:
-  - "Date of": _date
+  - "Enter the date": _date
     datatype: date
+    default: ${ today () }
 ---
 id: Utility Company Name
 question: |
@@ -229,24 +210,39 @@ question: |
 fields:
   - "Name of the utility company": other_parties[0].business_name
  # - "Address of the utility company": other_parties[0].address.address
----
-Id: Utility Company Address
-Question: What is the address for the utility company?
+--- 
+id: Utility Company Address
+question: | 
+  Utility Company Address
 fields:
-  - Street: other_parties[i].address.street
-  - City: other_parties[i].address.city
-  - State: other_parties[i].address.state
-  - Zip: other_parties[i].address.zip
+  - Street address: other_parties[0].address.street
+  - City: other_parties[0].address.city
+  - State: other_parties[0].address.state
+    code: states_list()
+  - Zip code: other_parties[0].address.zip
+    datatype: zip
+---
+code: | 
+  other_parties[0].name.first = other_parties[0].business_name
 ---
 id: Patient's Illness
 question: |
   What is the medical condition or illness of your patient?
-subquestion: |
-  Under MA law, a "serious health condition" is an illness, injury, impairment, or physical or mental condition that involves (i) inpatient care in a hospital, hospice, or residential medical facility; OR (ii) continuing treatment by a health care provider. 
+subquestion: | 
+ Under 29 CFR §825.115(c), a chronic condition is one which:
 
-  Under 29 CFR §825.115(c), chronic conditions is one which: (1) requires periodic visits (at leat twice a year) for treatment by a health care provider, or by a urse under direct supervision of a health care provider; (2) continues over an extended period of time; and (3) may cause episodic rather than a continuing period of incapacity (e.g., asthma, diabetes, epliepsy, etc.). 
+ 1. Requires periodic visits (at least twice a year) for treatment by a health care provider, or by a nurse under direct supervision of a health care provider.
+
+ 2. Continues over an extended period of time.
+
+ 3. May cause episodic rather than a continuing period of incapacity (e.g., asthma, diabetes, epilepsy, etc.).
+
 fields:
   - "Patient's illness": plaintiffs[0].illness
+    hint: cancer, heart disease, stroke
+  - note: |  
+      Under MA law, a "serious health condition" is an illness, injury, impairment, or physical or mental condition that involves (i) inpatient care in a hospital, hospice, or residential medical facility; OR (ii) continuing treatment by a health care provider.
+  
 ---
 id: preview utility_shutoff_prevention_form
 question: |
