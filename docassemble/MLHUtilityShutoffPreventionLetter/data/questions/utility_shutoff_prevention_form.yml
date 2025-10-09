@@ -272,8 +272,7 @@ subquestion: |
  ${ collapse_template(chronic_condition_definition) }
  
 fields:
-  - "Patient's illness": plaintiffs[0].illness
-    input type: area
+  - "My patient suffers from...": plaintiffs[0].illness
     hint: cancer, heart disease, stroke
   - note: |  
       
@@ -294,9 +293,7 @@ content: |
   Under 29 CFR §825.115(c), a chronic condition is one which:
 
        1. Requires periodic visits (at least twice a year) for treatment by a health care provider, or by a nurse under direct supervision of a health care provider.
-
        2. Continues over an extended period of time.
-
        3. May cause episodic rather than a continuing period of incapacity (e.g., asthma, diabetes, epilepsy, etc.).
 ---
 id: preview utility_shutoff_prevention_form
