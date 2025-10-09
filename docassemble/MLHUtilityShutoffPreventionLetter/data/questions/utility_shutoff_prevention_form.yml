@@ -2,6 +2,7 @@
 include:
   - docassemble.AssemblyLine:assembly_line.yml
   - docassemble.MassAccess:massaccess.yml
+  - docassemble.ALToolbox:collapse_template.yml
 ---
 metadata:
   title: >-
@@ -266,25 +267,37 @@ id: Patient's Illness
 question: |
   What is the medical condition or illness of your patient?
 subquestion: | 
- Under MA law, a "serious health condition" is an illness, injury, impairment, or physical or mental condition that involves (i) inpatient care in a hospital, hospice, or residential medical facility; OR (ii) continuing treatment by a health care provider.
-
- To learn more about statutory protections, visit this [link](https://malegislature.gov/Laws/GeneralLaws/PartI/TitleXXII/Chapter164/Section124a).
-
- For more general information, visit [Mass.gov](https://www.mass.gov/regulations/220-CMR-2500-billing-and-termination-procedures-of-the-department-of-public-utilities) 
+ 
+ ${ collapse_template(ma_serious_health_condition_definition) } 
+ ${ collapse_template(chronic_condition_definition) }
  
 fields:
   - "Patient's illness": plaintiffs[0].illness
     input type: area
     hint: cancer, heart disease, stroke
   - note: |  
-      Under 29 CFR §825.115(c), a chronic condition is one which:
+      
+      To learn more about statutory protections, visit this [link](https://malegislature.gov/Laws/GeneralLaws/PartI/TitleXXII/Chapter164/Section124a).
+
+       For more general information, visit [Mass.gov](https://www.mass.gov/regulations/220-CMR-2500-billing-and-termination-procedures-of-the-department-of-public-utilities) 
+---
+template: ma_serious_health_condition_definition
+subject: |
+  MA serious health condition definition 
+content: |
+  Under MA law, a "serious health condition" is an illness, injury, impairment, or physical or mental condition that involves (i) inpatient care in a hospital, hospice, or residential medical facility; OR (ii) continuing treatment by a health care provider.
+---
+template: chronic_condition_definition
+subject: |
+  Chronic health condition definition 
+content: |
+  Under 29 CFR §825.115(c), a chronic condition is one which:
 
        1. Requires periodic visits (at least twice a year) for treatment by a health care provider, or by a nurse under direct supervision of a health care provider.
 
        2. Continues over an extended period of time.
 
        3. May cause episodic rather than a continuing period of incapacity (e.g., asthma, diabetes, epilepsy, etc.).
-  
 ---
 id: preview utility_shutoff_prevention_form
 question: |
