@@ -61,7 +61,7 @@ code: |
   github_repo_name =  'docassemble-UtilityShutoffPreventionForm'
 ---
 code: |
-  interview_short_title = "Utility Shut-off Letter"
+  interview_short_title = "Utility shut off letter"
 ---
 code: |
   al_form_type = "letter" 
@@ -91,9 +91,9 @@ code: |
   users[0].business_name
   users[0].address.address
   users.gather()
+  plaintiffs[0].illness
   plaintiffs[0].name.full()
   plaintiffs[0].address.address
-  plaintiffs[0].illness
   knows_utility_account_number
   plaintiffs.gather()
   other_parties[0].business_name
@@ -129,7 +129,7 @@ code: |
 id: Utility_Shutoff_Prevention_Form
 continue button field: utility_shutoff_prevention_form_intro
 question: |
-  Utility Shutoff Prevention Form
+  Utility shut off prevention form
 subquestion: |
   This interview will help you write a letter to a utility company.
   
@@ -141,7 +141,7 @@ subquestion: |
   
   When you are finished, you will need to:
   
-  1. Submit the letter.
+  1. Submit the letter via mail.
 
   If you are a doctor, you can use this interview to write a letter to a utility company.
 
@@ -169,12 +169,49 @@ fields:
   - Zip code: users[0].address.zip
     datatype: zip
 ---
+id: user i's address
+question: |
+  What is your mailing address?
+fields:
+  - label: |
+      % if i > 0 and al_person_answering == "user":
+      Same as your address
+      % else:
+      Same as ${ users[0] }'s address
+      % endif
+    field: users[i].address
+    datatype: object_radio
+    choices:
+      - users[0].address if defined("users[0].address.address") else None
+    object labeler: |
+      lambda y: y.on_one_line()      
+    none of the above: |
+      Somewhere else
+    disable others: True
+    show if:
+      code: |
+        i > 0 and defined("users[0].address.address")
+  - ${ users[i].address.address_label}: users[i].address.address
+    address autocomplete: True
+  - ${ users[i].address.unit_label}: users[i].address.unit
+    required: False
+  - ${ users[i].address.city_label}: users[i].address.city
+  - ${ users[i].address.state_label}: users[i].address.state
+    code: |
+      states_list(country_code=AL_DEFAULT_COUNTRY)
+    default: ${ AL_DEFAULT_STATE }
+  - ${ users[i].address.zip_label}: users[i].address.zip
+    required: False
+#  - ${ users[i].address.country_label}: users[i].address.country
+#    code: countries_list()
+#    default: ${ AL_DEFAULT_COUNTRY }
+---
 Id: Enter your info
 question: |
-  Enter your job title and place of work. 
+  About your job 
 fields:
-  - "What is your job title?": users[0].job_title
-  - "Where do you work?": users[0].business_name
+  - "Job title": users[0].job_title
+  - "I work at": users[0].business_name
 ---
 id: Patient's Utility Company Account Number
 question: |
@@ -229,19 +266,24 @@ id: Patient's Illness
 question: |
   What is the medical condition or illness of your patient?
 subquestion: | 
- Under 29 CFR §825.115(c), a chronic condition is one which:
+ Under MA law, a "serious health condition" is an illness, injury, impairment, or physical or mental condition that involves (i) inpatient care in a hospital, hospice, or residential medical facility; OR (ii) continuing treatment by a health care provider.
 
- 1. Requires periodic visits (at least twice a year) for treatment by a health care provider, or by a nurse under direct supervision of a health care provider.
+ To learn more about statutory protections, visit this [link](https://malegislature.gov/Laws/GeneralLaws/PartI/TitleXXII/Chapter164/Section124a).
 
- 2. Continues over an extended period of time.
-
- 3. May cause episodic rather than a continuing period of incapacity (e.g., asthma, diabetes, epilepsy, etc.).
-
+ For more general information, visit [Mass.gov](https://www.mass.gov/regulations/220-CMR-2500-billing-and-termination-procedures-of-the-department-of-public-utilities) 
+ 
 fields:
   - "Patient's illness": plaintiffs[0].illness
+    input type: area
     hint: cancer, heart disease, stroke
   - note: |  
-      Under MA law, a "serious health condition" is an illness, injury, impairment, or physical or mental condition that involves (i) inpatient care in a hospital, hospice, or residential medical facility; OR (ii) continuing treatment by a health care provider.
+      Under 29 CFR §825.115(c), a chronic condition is one which:
+
+       1. Requires periodic visits (at least twice a year) for treatment by a health care provider, or by a nurse under direct supervision of a health care provider.
+
+       2. Continues over an extended period of time.
+
+       3. May cause episodic rather than a continuing period of incapacity (e.g., asthma, diabetes, epilepsy, etc.).
   
 ---
 id: preview utility_shutoff_prevention_form
