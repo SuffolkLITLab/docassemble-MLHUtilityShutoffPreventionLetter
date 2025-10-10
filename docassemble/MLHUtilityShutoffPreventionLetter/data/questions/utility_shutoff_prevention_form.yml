@@ -28,7 +28,13 @@ metadata:
   maturity: production
   estimated_completion_minutes: 10
   estimated_completion_delta: 5
-  tags: []
+  tags:
+    - HE-00-00-00-00
+    - FA-00-00-00-00
+    - BE-00-00-00-00
+    - DI-00-00-00-00
+    - HO-00-00-00-00
+    - GO-00-00-00-00
   authors:
     - Mark Marotta
   original_form: []
@@ -49,6 +55,7 @@ metadata:
     - Utility Shutoff Prevention Form
   form_numbers: []
   update_notes: |
+    Form created in October 2025. 
 ---
 code: |
   # This controls the default country and list of states in address field questions
@@ -93,16 +100,18 @@ code: |
   users[0].address.address
   users.gather()
   plaintiffs[0].illness
+  if plaintiffs[0].illness == False:
+      illness_exit_screen
   plaintiffs[0].name.full()
   plaintiffs[0].address.address
   knows_utility_account_number
-  plaintiffs.gather()
+  plaintiffs.gather()    
   other_parties[0].business_name
   other_parties[0].address.address
   knows_utility_account_number
-  other_parties.gather()
+  other_parties.gather()    
   set_progress(20)
-  set_progress(40)
+  set_progress(40)  
   _date
   users[0].signature
   interview_order_utility_shutoff_prevention_form = True
@@ -209,10 +218,10 @@ fields:
 ---
 Id: Enter your info
 question: |
-  About your job 
+  Tell us about your job 
 fields:
+  - "Employer name": users[0].business_name
   - "Job title": users[0].job_title
-  - "I work at": users[0].business_name
 ---
 id: Patient's Utility Company Account Number
 question: |
@@ -247,7 +256,6 @@ question: |
   Utility Company Name
 fields:
   - "Name of the utility company": other_parties[0].business_name
- # - "Address of the utility company": other_parties[0].address.address
 --- 
 id: Utility Company Address
 question: | 
@@ -265,20 +273,15 @@ code: |
 ---
 id: Patient's Illness
 question: |
-  What is the medical condition or illness of your patient?
-subquestion: | 
- 
- ${ collapse_template(ma_serious_health_condition_definition) } 
- ${ collapse_template(chronic_condition_definition) }
- 
+  Does your patient have a serious or chronic illness?
 fields:
-  - "My patient suffers from...": plaintiffs[0].illness
-    hint: cancer, heart disease, stroke
+  - Select one: plaintiffs[0].illness
+    datatype: yesnoradio
+    required: True
   - note: |  
-      
-      To learn more about statutory protections, visit this [link](https://malegislature.gov/Laws/GeneralLaws/PartI/TitleXXII/Chapter164/Section124a).
-
-       For more general information, visit [Mass.gov](https://www.mass.gov/regulations/220-CMR-2500-billing-and-termination-procedures-of-the-department-of-public-utilities) 
+     ${ collapse_template(ma_serious_health_condition_definition) } 
+     ${ collapse_template(chronic_condition_definition) }
+       
 ---
 template: ma_serious_health_condition_definition
 subject: |
@@ -292,9 +295,32 @@ subject: |
 content: |
   Under 29 CFR §825.115(c), a chronic condition is one which:
 
-       1. Requires periodic visits (at least twice a year) for treatment by a health care provider, or by a nurse under direct supervision of a health care provider.
-       2. Continues over an extended period of time.
-       3. May cause episodic rather than a continuing period of incapacity (e.g., asthma, diabetes, epilepsy, etc.).
+  1. Requires periodic visits (at least twice a year) for treatment by a health care provider, or by a nurse under direct supervision of a health care provider.
+  2. Continues over an extended period of time.
+  3. May cause episodic rather than a continuing period of incapacity (e.g., asthma, diabetes, epilepsy, etc.).
+---
+id: illness_exit_screen
+event: illness_exit_screen
+question: |
+  This form can only be completed for patients who have a qualifying illness.
+subquestion: |
+ You indicated that the patient does **not** have a serious or chronic illness.  
+  This form is only for patients who meet that criteria.  
+
+  If you selected "No" by mistake, you can go back and change your answer.
+
+ To learn more about statutory protections, visit this [link](https://malegislature.gov/Laws/GeneralLaws/PartI/TitleXXII/Chapter164/Section124a).
+
+ For more general information, visit [Mass.gov](https://www.mass.gov/regulations/220-CMR-2500-billing-and-termination-procedures-of-the-department-of-public-utilities)
+ 
+buttons:
+  - Exit: exit
+  - Go Back: back
+---
+mandatory: True
+code: |
+  if plaintiffs[0].illness == "No":
+      illness_exit_screen
 ---
 id: preview utility_shutoff_prevention_form
 question: |
