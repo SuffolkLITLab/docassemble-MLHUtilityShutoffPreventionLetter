@@ -98,6 +98,8 @@ code: |
   users[0].job_title
   users[0].business_name
   users[0].address.address
+  users[0].mobile_number
+  users[0].email
   users.gather()
   plaintiffs[0].illness
   if plaintiffs[0].illness == False:
@@ -231,6 +233,15 @@ fields:
     datatype: yesnoradio 
   - "Patient's Utility Account Number": plaintiffs[0].account_number
     show if: knows_utility_account_number
+---
+id: Users Contact Info
+question: |
+  Provide at least **one** point of contact 
+fields: 
+  - "Email address": users[0].mobile_number 
+    required: False
+  - "Phone number": users[0].email 
+    required: False
 ---
 id: Patient Name
 question: |
