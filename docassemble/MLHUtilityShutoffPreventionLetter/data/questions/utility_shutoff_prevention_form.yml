@@ -293,6 +293,13 @@ code: |
 id: Patient's Illness
 question: |
   Does your patient have a serious or chronic illness?
+subquestion: |
+  A serious illness can include:  
+ 
+  - Mental health conditions like depression, anxiety, PTSD, or ADHD.  
+  - Long-term health problems like diabetes, asthma, or fibromyalgia.  
+  - Short-term illnesses like pneumonia or the flu.
+
 fields:
   - Select one: plaintiffs[0].illness
     datatype: yesnoradio
