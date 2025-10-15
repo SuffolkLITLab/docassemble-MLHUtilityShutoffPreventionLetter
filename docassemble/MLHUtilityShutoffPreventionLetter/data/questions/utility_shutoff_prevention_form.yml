@@ -143,7 +143,7 @@ continue button field: utility_shutoff_prevention_form_intro
 question: |
   Utility shut off prevention form
 subquestion: |
-  This interview will help you write a letter to a utility company.
+  This interview will help a doctor, nurse practitioner, or physician's assistant write a letter to a utility company.
   
   Before you get started, please gather:
   
@@ -153,9 +153,9 @@ subquestion: |
   
   When you are finished, you will need to:
   
-  1. Submit the letter via mail.
-
-  If you are a doctor, you can use this interview to write a letter to a utility company.
+  1. Contact the utility company by phone and tell the company that your patient or someone in their household has a serious or chronic illness.  
+  2. Print the letter. 
+  3. Mail the letter within seven (7) days of the initial phone contact.
 
   Most people take about 10 minutes to complete this interview.
 ---  
@@ -224,6 +224,12 @@ question: |
 fields:
   - "Employer name": users[0].business_name
   - "Job title": users[0].job_title
+    datatype: radio
+    choices:
+      - Doctor: doctor
+      - Nurse practitioner: nurse practitioner
+      - Physician's assistant: physician assistant
+  
 ---
 id: Patient's Utility Company Account Number
 question: |
