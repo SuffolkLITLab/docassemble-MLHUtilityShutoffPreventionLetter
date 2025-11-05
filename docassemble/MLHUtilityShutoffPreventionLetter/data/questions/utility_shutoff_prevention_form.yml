@@ -10,21 +10,25 @@ metadata:
   short title: >-
     Utility Protections
   description: |-
-    This interview helps someone in Massachusetts write a letter to a utility company to prevent them from shutting off service.
+    This interview helps a doctor, nurse practitioner, or physician's assistant in Massachusetts write a letter to a utility company to prevent the utility company from shutting off service.
   can_I_use_this_form: |
-    If you are a doctor, you can use this interview to write a letter to a utility company.
+    If you are a doctor, nurse practitioner, or physician's assistant, you can use this interview to write a letter to a utility company.
   before_you_start: |
-    This interview will help you write a letter to a utility company.
-    
+    This interview will help a doctor, nurse practitioner, or physician's assistant write a letter to a utility company.
+  
     Before you get started, please gather:
-    
+  
     1. Your patient's address.
     2. Your patient's utility company name and address.
-    3. Your patient's utility account number.
-    
+    3. Your patient's utility account number, if available.
+  
     When you are finished, you will need to:
-    
-    1. Submit the letter.
+  
+    1. Contact the utility company by phone and tell the company that your patient or someone in their household has a serious or chronic illness.  
+    2. Print the letter. 
+    3. Mail the letter within seven (7) days of the initial phone contact.
+
+    Most people take about 10 minutes to complete this interview.
   maturity: production
   estimated_completion_minutes: 10
   estimated_completion_delta: 5
@@ -101,9 +105,7 @@ code: |
   users[0].mobile_number
   users[0].email
   users.gather()
-  plaintiffs[0].illness
-  if plaintiffs[0].illness == False:
-      illness_exit_screen
+  illness_type
   plaintiffs[0].name.full()
   plaintiffs[0].address.address
   knows_utility_account_number
@@ -149,7 +151,7 @@ subquestion: |
   
   1. Your patient's address.
   2. Your patient's utility company name and address.
-  3. Your patient's utility account number.
+  3. Your patient's utility account number, if available.
   
   When you are finished, you will need to:
   
@@ -183,7 +185,7 @@ fields:
 ---
 id: user i's address
 question: |
-  What is your mailing address?
+  What is the address of your place of work?
 fields:
   - label: |
       % if i > 0 and al_person_answering == "user":
@@ -250,6 +252,9 @@ fields:
     required: False
   - "Phone number": users[0].email 
     required: False
+validation code: |
+  if not users[0].email and not users[0].mobile_number:
+      validation_error("Please provide at least one contact method: email or phone number.")
 ---
 id: Patient Name
 question: |
@@ -292,34 +297,30 @@ code: |
 ---
 id: Patient's Illness
 question: |
-  Does your patient have a serious or chronic illness?
+  Does your patient have a serious **or** chronic illness?
 subquestion: |
-  A serious illness can include:  
- 
-  - Mental health conditions like depression, anxiety, PTSD, or ADHD.  
-  - Long-term health problems like diabetes, asthma, or fibromyalgia.  
-  - Short-term illnesses like pneumonia or the flu.
-
-fields:
-  - Select one: plaintiffs[0].illness
-    datatype: yesnoradio
-    required: True
-  - note: |  
-     ${ collapse_template(ma_serious_health_condition_definition) } 
+     ${ collapse_template(serious_health_condition_definition) } 
      ${ collapse_template(chronic_condition_definition) }
+
+field: illness_type
+choices: 
+  - Serious Illness
+  - Chronic Illness
        
 ---
-template: ma_serious_health_condition_definition
+template: serious_health_condition_definition
 subject: |
   MA serious health condition definition 
 content: |
-  Under MA law, a "serious health condition" is an illness, injury, impairment, or physical or mental condition that involves (i) inpatient care in a hospital, hospice, or residential medical facility; OR (ii) continuing treatment by a health care provider.
+  A "serious health condition" is an illness, injury, impairment, or physical or mental condition that involves (i) inpatient care in a hospital, hospice, or residential medical facility; OR (ii) continuing treatment by a health care provider.
+  
+  Learn more [here](https://www.masslegalhelp.org/housing-apartments-shelter/utilities/special-protections-against-shut-offs).
 ---
 template: chronic_condition_definition
 subject: |
   Chronic health condition definition 
 content: |
-  Under 29 CFR §825.115(c), a chronic condition is one which:
+  Under [29 CFR §825.115(c)](https://www.law.cornell.edu/cfr/text/29/825.115), a chronic condition is one which:
 
   1. Requires periodic visits (at least twice a year) for treatment by a health care provider, or by a nurse under direct supervision of a health care provider.
   2. Continues over an extended period of time.
@@ -341,11 +342,6 @@ subquestion: |
  
 buttons:
   - Exit: exit
----
-mandatory: True
-code: |
-  if plaintiffs[0].illness == "No":
-      illness_exit_screen
 ---
 id: preview utility_shutoff_prevention_form
 question: |
