@@ -12,9 +12,9 @@ metadata:
   description: |-
     This interview helps a doctor, nurse practitioner, or physician's assistant in Massachusetts write a letter to a utility company to prevent the utility company from shutting off service.
   can_I_use_this_form: |
-    If you are a doctor, nurse practitioner, or physician's assistant, you can use this interview to write a letter to a utility company.
+    If you are a doctor, nurse practitioner, or physician's assistant in Massachusetts, you can use this interview to write a letter to a utility company.
   before_you_start: |
-    This interview will help a doctor, nurse practitioner, or physician's assistant write a letter to a utility company.
+    This interview will help a doctor, nurse practitioner, or physician's assistant write a letter to a utility company, requesting that the patient's utilities not be shut off.
   
     Before you get started, please gather:
   
@@ -98,6 +98,7 @@ code: |
   nav.set_section("review_utility_shutoff_prevention_form")
   user_role = "doctor"
   user_ask_role = "doctor"
+  call_utility_company_info_page
   users[0].name.full()
   users[0].job_title
   users[0].business_name
@@ -143,9 +144,9 @@ code: |
 id: Utility_Shutoff_Prevention_Form
 continue button field: utility_shutoff_prevention_form_intro
 question: |
-  Utility shut off prevention form
+  Utility shut off prevention letter
 subquestion: |
-  This interview will help a doctor, nurse practitioner, or physician's assistant write a letter to a utility company.
+  This interview will help a doctor, nurse practitioner, or physician's assistant write a letter to a utility company, requesting that the patient's utilities not be shut off. 
   
   Before you get started, please gather:
   
@@ -161,6 +162,24 @@ subquestion: |
 
   Most people take about 10 minutes to complete this interview.
 ---  
+id: Call Utility Company Info Page
+continue button field: call_utility_company_info_page
+question: |
+  Have you called the utility company about your patient? 
+subquestion: |
+  Before you mail this letter to the utility company, you must contact the utility company by phone and tell them that your patient or someone in their household is seriously ill. Provide the patient's name and address to the utility company. 
+
+  Then, you must send a letter to the utility company certifying the illness (this form), within seven (7) days of this initial phone contact. 
+
+  If the utility company refuses to honor the initial phone call, report this immediately to the Department of Public Utilities' (DPU) Consumer Division and request that the DPU order the company to continue service. 
+
+  DPU Phone Contact:
+ 
+   * (617) 737-2836
+  
+   * (817) 886-5066 (toll-free)
+  
+---
 id: User's name
 question: |
   What is your name?
@@ -310,11 +329,28 @@ choices:
 ---
 template: serious_health_condition_definition
 subject: |
-  MA serious health condition definition 
+  Serious health condition definition 
 content: |
-  A "serious health condition" is an illness, injury, impairment, or physical or mental condition that involves (i) inpatient care in a hospital, hospice, or residential medical facility; OR (ii) continuing treatment by a health care provider.
+  A "serious health condition" is an illness, injury, impairment, or physical or mental condition that involves (i) inpatient care in a hospital, hospice, or residential medical facility; **or** (ii) continuing treatment by a health care provider. 
+
+    "Continuing treatment" is treatment for a condition that fits any of the following descriptions:
+    
+    * Any incapacity to work for more than three (3) consecutive full calendar days that also requires medical visits. Telehealth appointments are also included. 
   
+    * Any incapacity due to pregnancy or prenatal care. 
+  
+    * Any incapacity due to a chronic condition, which is a condition that:
+        - Requires periodic medical visits, 
+        - Continues over an extended period of time, and 
+        - May cause episodic periods of incapacity that require leave, e.g., asthma or migraine headaches. 
+  
+    * Any incapacity due to a permanent or long-term condition that may not respond to treatment (e.g., Alzheimer's disease or terminal stages of cancer).
+  
+    * Any absence to receive multiple treatments, plus any recovery time, for either (i) restorative surgery after an accident or injury (e.g., joint replacements or reconstruction) or (ii) a condition that would lead to more than three (3) consecutive days of incapacity if the patient did not receive treatment (e.g., chemotherapy treatments). 
+    
   Learn more [here](https://www.masslegalhelp.org/housing-apartments-shelter/utilities/special-protections-against-shut-offs).
+
+  If you selected this option, this form must be completed and submitted to the utility company every 90 days to continue this assistance.
 ---
 template: chronic_condition_definition
 subject: |
@@ -322,9 +358,12 @@ subject: |
 content: |
   Under [29 CFR §825.115(c)](https://www.law.cornell.edu/cfr/text/29/825.115), a chronic condition is one which:
 
-  1. Requires periodic visits (at least twice a year) for treatment by a health care provider, or by a nurse under direct supervision of a health care provider.
+  1. Requires periodic visits (at least twice a year) for treatment by a health care provider, or by a nurse under the direct supervision of a health care provider.
   2. Continues over an extended period of time.
   3. May cause episodic rather than a continuing period of incapacity (e.g., asthma, diabetes, epilepsy, etc.).
+
+    If you selected this option, this form must be completed and submitted to the utility company every 180 days to continue this assistance.
+
 ---
 id: illness_exit_screen
 event: illness_exit_screen
