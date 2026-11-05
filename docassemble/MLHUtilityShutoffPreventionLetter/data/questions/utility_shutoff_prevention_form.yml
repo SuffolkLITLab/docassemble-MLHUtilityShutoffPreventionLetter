@@ -286,7 +286,7 @@ fields:
 #    code: countries_list()
 #    default: ${ AL_DEFAULT_COUNTRY }
 ---
-Id: Enter your info
+id: "tell us about your job"
 question: |
   Tell us about your job 
 fields:
@@ -396,7 +396,7 @@ content: |
   
     * Any absence to receive multiple treatments, plus any recovery time, for either (i) restorative surgery after an accident or injury (e.g., joint replacements or reconstruction) or (ii) a condition that would lead to more than three (3) consecutive days of incapacity if the patient did not receive treatment (e.g., chemotherapy treatments). 
     
-  Learn more [here](https://www.masslegalhelp.org/housing-apartments-shelter/utilities/special-protections-against-shut-offs).
+  Learn more about [special protections against utility shutoffs](https://www.masslegalhelp.org/housing-apartments-shelter/utilities/special-protections-against-shut-offs).
 
   If you selected this option, this form must be completed and submitted to the utility company every 90 days to continue this assistance.
 ---
@@ -424,7 +424,7 @@ subquestion: |
 
   If you selected "No" by mistake, click "undo" and change your answer.
 
-  To learn more about statutory protections, visit this [link](https://malegislature.gov/Laws/GeneralLaws/PartI/TitleXXII/Chapter164/Section124a).
+  To learn more about statutory protections, read [Massachusetts utility shutoff protections](https://malegislature.gov/Laws/GeneralLaws/PartI/TitleXXII/Chapter164/Section124a).
 
   For more general information, visit [Mass.gov](https://www.mass.gov/regulations/220-CMR-2500-billing-and-termination-procedures-of-the-department-of-public-utilities)
  
@@ -482,6 +482,7 @@ review:
       % endfor
 ---
 continue button field: users.revisit
+id: "edit users"
 question: |
   Edit users
 subquestion: |
@@ -509,6 +510,7 @@ confirm: True
 
 ---
 continue button field: plaintiffs.revisit
+id: "edit plaintiffs"
 question: |
   Edit plaintiffs
 subquestion: |
@@ -536,6 +538,7 @@ confirm: True
 
 ---
 continue button field: other_parties.revisit
+id: "edit other parties"
 question: |
   Edit other_parties
 subquestion: |
