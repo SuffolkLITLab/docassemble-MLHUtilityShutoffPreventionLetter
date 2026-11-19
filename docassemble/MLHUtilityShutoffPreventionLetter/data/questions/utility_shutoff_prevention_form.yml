@@ -4,55 +4,38 @@ include:
   - docassemble.MassAccess:massaccess.yml
 ---
 metadata:
-  title: >-
-    Utility Shutoff Prevention Form
-  short title: >-
-    Utility shutoff prevention letter
-  description: |-
-    This interview helps a doctor, nurse practitioner, or physician assistant in Massachusetts write a letter to a utility company to prevent the utility company from shutting off service.
+  title: Medical letter to stop a utility shutoff
+  short title: Utility shutoff prevention letter
+  description: >-
+    Massachusetts doctors, nurse practitioners, and physician assistants can use this letter
+    to certify a serious illness. It asks the utility company to stop a gas or electricity
+    shutoff or restore service to the patient’s household.
   can_I_use_this_form: |
-    If you are a doctor, nurse practitioner, or physician assistant in Massachusetts, you can use this interview to write a letter to a utility company.
+    Use this interview if you are a Massachusetts doctor, nurse practitioner, or physician assistant
+    writing for a patient with a serious illness. The paper form linked here is for a serious and chronic illness.
+    The help guide explains other options.
   before_you_start: |
-    This interview helps Massachusetts clinicians write a letter to a utility company. It asks the company to keep or restore service for a patient’s household.
-
-    Before you start, gather:
-
-    1. Your patient's address.
-    2. The utility company name and address.
-    3. The utility account number, if you have it.
-
-    Most people take about 10 minutes to complete this interview.
+    Have your work phone number, the patient’s address, and the utility company’s mailing address.
+    Include the account number if you have it.
   when_you_are_finished: |
-    When you are finished, you will need to:
-
-    1. Tell the utility company about the serious illness. Someone acting for the customer can also call.
-    2. Print the letter.
-    3. If the utility was told about the illness by phone, send the written certification within 7 days of that call.
+    Review and sign the letter. Send it to the utility company.
+    If the utility first learned about the illness by phone, send the letter within seven days of that call.
+    The customer may also need to send a financial hardship form.
   maturity: production
   estimated_completion_minutes: 10
   estimated_completion_delta: 5
   LIST_topics:
-    - HE-00-00-00-00
-    - FA-00-00-00-00
-    - BE-00-00-00-00
-    - DI-00-00-00-00
-    - HO-00-00-00-00
-    - GO-00-00-00-00
+    - HO-07-01-00-00
   tags:
-    - HE-00-00-00-00
-    - FA-00-00-00-00
-    - BE-00-00-00-00
-    - DI-00-00-00-00
-    - HO-00-00-00-00
-    - GO-00-00-00-00
+    - HO-07-01-00-00
   authors:
     - Mark Marotta
-  original_form: https://www.masslegalhelp.org/public-benefits-ssi/utilities-other-benefits/stop-your-heat-and-electricity-getting-shut
+  original_form: https://www.masslegalhelp.org/sites/default/files/2025-04/Form%208.Illness-Utility%20Form%202025.pdf
   original_form_published_on: ""
   help_page_url: >-
     https://www.masslegalhelp.org/public-benefits-ssi/utilities-other-benefits/stop-your-heat-and-electricity-getting-shut
   help_page_title: >-
-    Mass Legal Help
+    Massachusetts Legal Help’s utility shutoff guide
   integrated_efiling: False
   integrated_email_filing: False
   allowed_courts: []
