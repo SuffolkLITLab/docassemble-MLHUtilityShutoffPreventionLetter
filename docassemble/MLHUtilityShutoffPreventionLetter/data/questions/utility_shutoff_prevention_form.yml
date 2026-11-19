@@ -2,6 +2,7 @@
 include:
   - docassemble.AssemblyLine:assembly_line.yml
   - docassemble.MassAccess:massaccess.yml
+  - docassemble.LITLabTheme:main.yml
 ---
 metadata:
   title: Medical letter to stop a utility shutoff
