@@ -2,19 +2,18 @@
 include:
   - docassemble.AssemblyLine:assembly_line.yml
   - docassemble.MassAccess:massaccess.yml
-  - docassemble.ALToolbox:collapse_template.yml
 ---
 metadata:
   title: >-
     Utility Shutoff Prevention Form
   short title: >-
-    Utility Protections
+    Utility shutoff prevention letter
   description: |-
     This interview helps a doctor, nurse practitioner, or physician assistant in Massachusetts write a letter to a utility company to prevent the utility company from shutting off service.
   can_I_use_this_form: |
     If you are a doctor, nurse practitioner, or physician assistant in Massachusetts, you can use this interview to write a letter to a utility company.
   before_you_start: |
-    This interview will help a doctor, nurse practitioner, or physician assistant write a letter asking a utility company not to shut off a patient's service.
+    This interview helps Massachusetts clinicians write a letter to a utility company. It asks the company to keep or restore service for a patient’s household.
 
     Before you start, gather:
 
@@ -26,9 +25,9 @@ metadata:
   when_you_are_finished: |
     When you are finished, you will need to:
 
-    1. Call the utility company and say that your patient or someone in their household has a serious or chronic illness.
+    1. Tell the utility company about the serious illness. Someone acting for the customer can also call.
     2. Print the letter.
-    3. Mail the letter within 7 days of the phone call.
+    3. If the utility was told about the illness by phone, send the written certification within 7 days of that call.
   maturity: production
   estimated_completion_minutes: 10
   estimated_completion_delta: 5
@@ -48,10 +47,10 @@ metadata:
     - GO-00-00-00-00
   authors:
     - Mark Marotta
-  original_form: []
+  original_form: https://www.masslegalhelp.org/public-benefits-ssi/utilities-other-benefits/stop-your-heat-and-electricity-getting-shut
   original_form_published_on: ""
   help_page_url: >-
-    https://www.masslegalhelp.org/housing-apartments-shelter/utilities/special-protections-against-shut-offs
+    https://www.masslegalhelp.org/public-benefits-ssi/utilities-other-benefits/stop-your-heat-and-electricity-getting-shut
   help_page_title: >-
     Mass Legal Help
   integrated_efiling: False
@@ -80,9 +79,7 @@ code: |
 ---
 code: |
   github_repo_name =  'docassemble-MLHUtilityShutoffPreventionLetter'
----
-code: |
-  interview_short_title = "Utility shutoff prevention letter"
+
 ---
 code: |
   al_form_type = "letter" 
@@ -113,7 +110,7 @@ code: |
   has_qualifying_illness
   if not has_qualifying_illness:
       illness_exit_screen
-  illness_type
+  medical_certification_reviewed
   call_utility_company_info_page
   users[0].name.full()
   users[0].job_title
@@ -131,7 +128,7 @@ code: |
   other_parties.gather()    
   set_progress(20)
   set_progress(40)  
-  _date
+  certification_date
   interview_order_utility_shutoff_prevention_form = True
 ---
 ###################### Main order ######################
@@ -143,6 +140,7 @@ code: |
   al_intro_screen
   utility_shutoff_prevention_form_intro
   interview_order_utility_shutoff_prevention_form
+  utility_shutoff_prevention_form_preview_question
   basic_questions_signature_flow
   signature_date
   # Store anonymous data for analytics / statistics
@@ -160,7 +158,7 @@ continue button field: utility_shutoff_prevention_form_intro
 question: |
   Utility shutoff prevention letter
 subquestion: |
-  This interview helps a doctor, nurse practitioner, or physician assistant write a letter asking a utility company not to shut off a patient's service.
+  This interview helps Massachusetts clinicians write to a utility company. It asks the company to keep or restore service for a patient’s household.
 
   Before you start, gather:
 
@@ -170,9 +168,9 @@ subquestion: |
 
   After you finish, you must:
 
-  1. Call the utility company and say that your patient or someone in their household has a serious or chronic illness.
+  1. Tell the utility company about the serious illness. Someone acting for the customer can also call.
   2. Print the letter.
-  3. Mail the letter within 7 days of the phone call.
+  3. If the utility was told about the illness by phone, send the written certification within 7 days of that call.
 
   Most people take about 10 minutes to finish this interview.
 ---
@@ -190,11 +188,10 @@ question: |
 subquestion: |
   This letter is for doctors, nurse practitioners, and physician assistants in Massachusetts.
 
-  If that does not describe you, this form is not the right fit.
+  A local board of health can also certify a serious illness under the DPU rule.
+  For other certification options and model letters, see:
 
-  You can learn more about utility shutoff protections here:
-
-  [Mass Legal Help](https://www.masslegalhelp.org/housing-apartments-shelter/utilities/special-protections-against-shut-offs).
+  [Mass Legal Help](https://www.masslegalhelp.org/public-benefits-ssi/utilities-other-benefits/stop-your-heat-and-electricity-getting-shut).
 
 buttons:
   - Exit: exit
@@ -203,8 +200,7 @@ id: patient illness eligibility
 question: |
   Does your patient have a serious or chronic illness?
 subquestion: |
-  ${ collapse_template(serious_health_condition_definition) }
-  ${ collapse_template(chronic_condition_definition) }
+  Use your clinical judgment. See [Massachusetts utility shutoff protections](https://www.mass.gov/doc/billing-and-termination-regulations-0/download) for the rule that applies to this letter.
 fields:
   - My patient has a serious or chronic illness: has_qualifying_illness
     datatype: yesnoradio
@@ -214,44 +210,29 @@ continue button field: call_utility_company_info_page
 question: |
   Call the utility company first
 subquestion: |
-  Before you mail this letter, you must call the utility company and say your patient (or someone in their household) is seriously ill. Share the patient's name and address.
+  You or someone acting for the customer can call the utility to report the serious illness.
+  Share the patient’s name and address. Send the written certification within 7 days of the call.
 
-  Then, you must send this letter within 7 days of that phone call.
+  The customer may also need to return a financial hardship form within 7 days of receiving it.
+  See [Massachusetts Legal Help’s shutoff guide](https://www.masslegalhelp.org/public-benefits-ssi/utilities-other-benefits/stop-your-heat-and-electricity-getting-shut) for hardship and renewal steps.
 
-  If the utility company does not honor the phone call, contact the Department of Public Utilities (DPU) Consumer Division and ask them to order the company to continue service.
-
-  DPU Consumer Division phone numbers:
-
-   * (617) 737-2836
-
-   * 1-877-886-5066 (toll-free)
-  
+  If the company does not honor the notice, call the DPU Consumer Division.
+  Call [(617) 737-2836](tel:+16177372836) or [(877) 886-5066](tel:+18778865066).
 ---
 id: User's name
 question: |
   What is your name?
 fields:
-  - First Name: users[0].name.first
-  - Middle Name: users[0].name.middle
+  - First name: users[0].name.first
+  - Middle name: users[0].name.middle
     required: False
-  - Last Name: users[0].name.last
+  - Last name: users[0].name.last
   - Suffix: users[0].name.suffix
     required: False
 ---
-id: users business address
-question: |
-  What is your address?
-fields:
-  - Street address: users[0].address.street
-  - City: users[0].address.city
-  - State: users[0].address.state
-    code: states_list()
-  - Zip code: users[0].address.zip
-    datatype: zip
----
 id: user i's address
 question: |
-  What is the address of your place of work?
+  What is your work address?
 fields:
   - label: |
       % if i > 0 and al_person_answering == "user":
@@ -299,39 +280,38 @@ fields:
       - Physician assistant: physician assistant
   
 ---
-id: Patient's Utility Company Account Number
+id: Patient's utility account number
 question: |
-  Patient's Utility Company Account Number
+  Patient's utility account number
 fields:
   - "Do you know the patient's account number?": knows_utility_account_number
     datatype: yesnoradio 
-  - "Patient's Utility Account Number": plaintiffs[0].account_number
+  - "Patient's utility account number": plaintiffs[0].account_number
     show if: knows_utility_account_number
 ---
 id: Users Contact Info
 question: |
-  Provide at least one way to contact you
+  What is your work phone number?
 subquestion: |
-  The utility company can use this contact information if they have questions.
+  The utility company needs a phone number for your office. You can also give a work email address.
 fields: 
   - "Email address": users[0].email
     datatype: email
     required: False
-  - "Phone number": users[0].mobile_number
+  - "Work phone number": users[0].mobile_number
     datatype: al_phone
-    required: False
 validation code: |
-  if not users[0].email and not users[0].mobile_number:
-      validation_error("Please provide at least one contact method: email or phone number.")
+  if not phone_number_is_valid(users[0].mobile_number):
+    validation_error("Enter a valid work phone number, including the area code.", field="users[0].mobile_number")
 ---
 id: Patient Name
 question: |
   What is your patient's name?
 fields:
-  - Patient First Name: plaintiffs[0].name.first
-  - Patient Middle Name: plaintiffs[0].name.middle
+  - Patient first name: plaintiffs[0].name.first
+  - Patient middle name: plaintiffs[0].name.middle
     required: False
-  - Patient Last Name: plaintiffs[0].name.last
+  - Patient last name: plaintiffs[0].name.last
   - Suffix (if applicable): plaintiffs[0].name.suffix
     required: False
 ---
@@ -339,79 +319,43 @@ id: Today's Date
 question: |
   When are you sending this letter? 
 fields:
-  - "Enter the date": _date
+  - "Date of the letter": certification_date
     datatype: date
-    default: ${ today () }
+    default: ${ showifdef("_date") or today() }
 ---
 id: Utility Company Name
 question: |
-  Utility Company Name
+  What is the utility company’s name?
 fields:
   - "Name of the utility company": other_parties[0].business_name
 --- 
 id: Utility Company Address
-question: | 
-  Utility Company Address
+question: |
+  What is the utility company’s mailing address?
 fields:
-  - Street address: other_parties[0].address.street
-  - City: other_parties[0].address.city
-  - State: other_parties[0].address.state
-    code: states_list()
-  - Zip code: other_parties[0].address.zip
-    datatype: zip
+  - code: |
+      other_parties[0].address_fields(default_state=AL_DEFAULT_STATE)
 ---
 code: | 
   other_parties[0].name.first = other_parties[0].business_name
 ---
-id: Patient's Illness
+id: medical certification
 question: |
-  Which type of illness does your patient have?
+  What illness are you certifying?
 subquestion: |
-  ${ collapse_template(serious_health_condition_definition) }
-  ${ collapse_template(chronic_condition_definition) }
-field: illness_type
-choices:
-  - Serious illness
-  - Chronic illness
-       
----
-template: serious_health_condition_definition
-subject: |
-  Serious health condition definition 
-content: |
-  A "serious health condition" is an illness, injury, impairment, or physical or mental condition that involves (i) inpatient care in a hospital, hospice, or residential medical facility; **or** (ii) continuing treatment by a health care provider. 
-
-    "Continuing treatment" is treatment for a condition that fits any of the following descriptions:
-    
-    * Any incapacity to work for more than three (3) consecutive full calendar days that also requires medical visits. Telehealth appointments are also included. 
-  
-    * Any incapacity due to pregnancy or prenatal care. 
-  
-    * Any incapacity due to a chronic condition, which is a condition that:
-        - Requires periodic medical visits, 
-        - Continues over an extended period of time, and 
-        - May cause episodic periods of incapacity that require leave, e.g., asthma or migraine headaches. 
-  
-    * Any incapacity due to a permanent or long-term condition that may not respond to treatment (e.g., Alzheimer's disease or terminal stages of cancer).
-  
-    * Any absence to receive multiple treatments, plus any recovery time, for either (i) restorative surgery after an accident or injury (e.g., joint replacements or reconstruction) or (ii) a condition that would lead to more than three (3) consecutive days of incapacity if the patient did not receive treatment (e.g., chemotherapy treatments). 
-    
-  Learn more about [special protections against utility shutoffs](https://www.masslegalhelp.org/housing-apartments-shelter/utilities/special-protections-against-shut-offs).
-
-  If you selected this option, this form must be completed and submitted to the utility company every 90 days to continue this assistance.
----
-template: chronic_condition_definition
-subject: |
-  Chronic health condition definition 
-content: |
-  Under [29 CFR §825.115(c)](https://www.law.cornell.edu/cfr/text/29/825.115), a chronic condition is one which:
-
-  1. Requires periodic visits (at least twice a year) for treatment by a health care provider, or by a nurse under the direct supervision of a health care provider.
-  2. Continues over an extended period of time.
-  3. May cause episodic rather than a continuing period of incapacity (e.g., asthma, diabetes, epilepsy, etc.).
-
-    If you selected this option, this form must be completed and submitted to the utility company every 180 days to continue this assistance.
-
+  The DPU rule asks for the nature of the illness. Give only the medical detail needed for this certification.
+  If you leave this field blank, fill in the missing information in the letter before sending it.
+continue button field: medical_certification_reviewed
+fields:
+  - Illness type: certified_illness_type
+    datatype: radio
+    choices:
+      - Serious illness: serious
+      - Chronic serious illness: chronic
+  - Nature of the illness: nature_of_illness
+    input type: area
+    rows: 2
+    required: False
 ---
 id: illness_exit_screen
 event: illness_exit_screen
@@ -420,9 +364,7 @@ question: |
 subquestion: |
   You said the patient does not have a serious or chronic illness.
 
-  This form is only for patients who meet that requirement.
-
-  If you selected "No" by mistake, click "undo" and change your answer.
+  If you chose "No" by mistake, go back to change your answer.
 
   To learn more about statutory protections, read [Massachusetts utility shutoff protections](https://malegislature.gov/Laws/GeneralLaws/PartI/TitleXXII/Chapter164/Section124a).
 
@@ -455,118 +397,54 @@ event: review_utility_shutoff_prevention_form
 question: |
   Review your answers
 review:
-  - Edit: users.revisit
+  - Edit: users[0].job_title
     button: |
-      **Users**
-
-      % for item in users:
-        * ${ item }
-      % endfor
-  - Edit: _date
+      **Your role and employer**: ${ users[0].job_title }, ${ users[0].business_name }
+  - Edit: users[0].address.address
     button: |
-      **Date of**:
-      ${ _date }
-  - Edit: plaintiffs.revisit
+      **Your work address**: ${ users[0].address.on_one_line() }
+  - Edit: users[0].mobile_number
     button: |
-      **Plaintiffs**
-
-      % for item in plaintiffs:
-        * ${ item }
-      % endfor
-  - Edit: other_parties.revisit
+      **Your work phone number**: ${ users[0].mobile_number }
+  - Edit: certified_illness_type
     button: |
-      **Other parties**
+      **Illness type**: ${ "Chronic serious illness" if certified_illness_type == "chronic" else "Serious illness" }
 
-      % for item in other_parties:
-        * ${ item }
-      % endfor
----
-continue button field: users.revisit
-id: "edit users"
-question: |
-  Edit users
-subquestion: |
-  ${ users.table }
-
-  ${ users.add_action() }
----
-table: users.table
-rows: users
-columns:
-  - Job: |
-      row_item.job_title.title() if defined("row_item.job_title") else ""
-  - Signature: |
-      row_item.signature if defined("row_item.signature") else ""
-  - Business name: |
-      row_item.business_name if defined("row_item.business_name") else ""
-  - Address: |
-      row_item.address.block() if defined("row_item.address.address") else ""
-edit:
-  - job_title
-  - signature
-  - business_name
-  - address.address
-confirm: True
-
----
-continue button field: plaintiffs.revisit
-id: "edit plaintiffs"
-question: |
-  Edit plaintiffs
-subquestion: |
-  ${ plaintiffs.table }
-
-  ${ plaintiffs.add_action() }
----
-table: plaintiffs.table
-rows: plaintiffs
-columns:
-  - Address: |
-      row_item.address.block() if defined("row_item.address.address") else ""
-  - Account: |
-      row_item.account_number if defined("row_item.account_number") else ""
-  - Illness: |
-      illness_type if defined("illness_type") else ""
-  - Name: |
-      row_item.name.full() if defined("row_item.name.first") else ""
-edit:
-  - address.address
-  - account_number
-  - illness_type
-  - name.first
-confirm: True
-
----
-continue button field: other_parties.revisit
-id: "edit other parties"
-question: |
-  Edit other_parties
-subquestion: |
-  ${ other_parties.table }
-
-  ${ other_parties.add_action() }
----
-table: other_parties.table
-rows: other_parties
-columns:
-  - Business name: |
-      row_item.business_name if defined("row_item.business_name") else ""
-  - Address: |
-      row_item.address.block() if defined("row_item.address.address") else ""
-edit:
-  - business_name
-  - address.address
-confirm: True
-
+      **Nature of illness**: ${ nature_of_illness or "Fill in before sending" }
+  - Edit: users[0].name.first
+    button: |
+      **Certifying clinician**: ${ users[0].name.full() }
+  - Edit: certification_date
+    button: |
+      **Letter date**:
+      ${ certification_date }
+  - Edit: knows_utility_account_number
+    button: |
+      **Patient’s utility account number**: ${ plaintiffs[0].account_number if knows_utility_account_number else "Not entered" }
+  - Edit: plaintiffs[0].name.first
+    button: |
+      **Patient**: ${ plaintiffs[0].name.full() }
+  - Edit: plaintiffs[0].address.address
+    button: |
+      **Patient’s address**: ${ plaintiffs[0].address.on_one_line() }
+  - Edit: other_parties[0].business_name
+    button: |
+      **Utility company**: ${ other_parties[0].business_name }
+  - Edit: other_parties[0].address.address
+    button: |
+      **Utility company mailing address**: ${ other_parties[0].address.on_one_line() }
 ---
 id: download utility_shutoff_prevention_form
 event: utility_shutoff_prevention_form_download
 question: |
   All done
 subquestion: |
-  Thank you ${users}. Your form is ready to download and deliver.
+  Thank you ${ users }. Review the letter before sending it.
+  % if not nature_of_illness:
+  Fill in the nature of the illness in the letter before you send it.
+  % endif
   
-  View, download and send your form below. Click the "Edit answers" button to fix any mistakes.
+  Download the letter below. Click "Edit answers" to fix any mistakes.
 
   ${ action_button_html(url_action('review_utility_shutoff_prevention_form'), label='Edit answers', color='info') }
   
@@ -574,7 +452,7 @@ subquestion: |
   ${ al_user_bundle.download_list_html() }
   
 
-  ${ al_user_bundle.send_button_html(show_editable_checkbox=True) }
+
 
 progress: 100
 ---
