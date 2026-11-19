@@ -15,6 +15,7 @@ authors = [
 dependencies = [
     "docassemble.AssemblyLine>=4.9.0",
     "docassemble.MassAccess",
+    "docassemble.LITLabTheme",
 ]
 
 [project.urls]
